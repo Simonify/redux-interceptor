@@ -1,0 +1,20 @@
+{
+  "name": "redux-interceptor-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "$(npm bin)/cross-env BABEL_ENV=commonjs $(npm bin)/babel src --out-dir lib",
+    "start": "npm run build && node lib/index.js"
+  },
+  "author": "Simon Fletcher <simon@wakecodesleep.com> (http://wakecodesleep.com)",
+  "license": "MIT",
+  "dependencies": {
+    "redux": "^3.5.2",
+    "redux-thunk": "^2.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.8.0",
+    "cross-env": "^1.0.7"
+  }
+}
