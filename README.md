@@ -51,10 +51,10 @@ const SET_RANDOM = 'example/SET_RANDOM';
 const fetchRandom = () => dispatch => {
   dispatch({ type: FETCH_RANDOM });
 
-  return new Promise((resolve) => resolve(dispatch({
+  return new Promise((resolve) => setTimeout(() => resolve(dispatch({
     type: SET_RANDOM,
     payload: Math.random()
-  })));
+  })), 2500));
 }
 
 function reducer(state = { fetching: false, random: null }, action) {
