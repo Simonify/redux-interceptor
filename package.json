@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "A Redux middleware for intercepting Redux actions for execution at a later time.",
   "main": "lib/index.js",
-  "dependencies": {
-    "babel-cli": "^6.8.0"
-  },
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "devDependencies": {
     "babel-cli": "^6.8.0",
     "babel-eslint": "^6.0.4",
@@ -14,18 +16,17 @@
     "babel-preset-stage-0": "^6.5.0",
     "eslint": "^2.9.0",
     "eslint-config-airbnb-base": "^2.0.0",
-    "eslint-plugin-import": "^1.6.1",
     "rimraf": "^2.5.2",
     "webpack": "^1.13.0"
   },
   "scripts": {
     "build:commonjs": "$(npm bin)/cross-env BABEL_ENV=commonjs $(npm bin)/babel src --out-dir lib",
     "build:es": "$(npm bin)/cross-env BABEL_ENV=es $(npm bin)/babel src --out-dir es",
-    "build:umd": "$(npm bin)/cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/reduxInterceptor.js",
-    "build:umd:min": "$(npm bin)/cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/reduxInterceptor.min.js",
+    "build:umd": "$(npm bin)/cross-env BABEL_ENV=commonjs NODE_ENV=development $(npm bin)/webpack src/index.js dist/reduxInterceptor.js",
+    "build:umd:min": "$(npm bin)/cross-env BABEL_ENV=commonjs NODE_ENV=production $(npm bin)/webpack src/index.js dist/reduxInterceptor.min.js",
     "build": "npm run clean && npm run build:commonjs && npm run build:es && npm run build:umd && npm run build:umd:min",
     "clean": "$(npm bin)/rimraf lib",
-    "prepublish": "npm run clean && npm run test && npm run build"
+    "prepublish": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",

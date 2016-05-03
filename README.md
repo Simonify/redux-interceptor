@@ -38,18 +38,44 @@ The promise returned will resolve when all of the actions have resolved, or reje
 ## Usage with React for asynchronous renders:
 
 ```js
-import Render, { renderToString } from 'react';
+import React, { Component, PropTypes, renderToString } from 'react';
 import { applyMiddleware, createStore } from 'redux';
+import { connect } from 'react-redux';
 import thunk from 'redux-thunk';
-import promise from 'redux-promise';
 import createInterceptor from 'redux-interceptor';
-import App from 'components/app';
 
-const render() => renderToString(<App />);
+const fetchRandom = () => dispatch => {
+  dispatch({ type: 'FETCH_RANDOM' });
+
+  return new Promise((resolve) => resolve(dispatch({
+    type: 'FETCH_RANDOM',
+    random: Math.random()
+  })));
+}
+
+class App extends Component {
+  static propTypes = {
+    fetchRandom: PropTypes.func.isRequired,
+    random: PropTypes.number
+  };
+
+  componentWillMount() {
+    if (!this.props.random) {
+      this.props.fetchRandom();
+    }
+  }
+
+  render() {
+    return (<div>{this.props.random ? this.props.random : 'Loading...'}</div>);
+  }
+}
+
+const ConnectedApp = connect(App, ({ random }) => ({ random }), { fetchServerName });
+const render() => renderToString(<ConnectedApp />);
 const interceptor = createInterceptor();
 const store = createStore(
   reducer,
-  applyMiddleware(thunk, promise, interceptor)
+  applyMiddleware(interceptor, thunk)
 );
 
 render();
