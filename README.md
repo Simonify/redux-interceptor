@@ -75,13 +75,17 @@ class App extends Component {
   };
 
   componentWillMount() {
-    if (!this.props.random) {
+    if (typeof this.props.random !== 'number') {
       this.props.fetchRandom();
     }
   }
 
   render() {
-    return (<div>{this.props.random ? this.props.random : 'Loading...'}</div>);
+    return (
+      <div>
+        {typeof this.props.random === 'number' ? this.props.random : 'Loading...'}
+      </div>
+    );
   }
 }
 
