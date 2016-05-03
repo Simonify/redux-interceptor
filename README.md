@@ -38,19 +38,34 @@ The promise returned will resolve when all of the actions have resolved, or reje
 ## Usage with React for asynchronous renders:
 
 ```js
-import React, { Component, PropTypes, renderToString } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { renderToString } from 'react-dom/server';
 import { applyMiddleware, createStore } from 'redux';
-import { connect } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import thunk from 'redux-thunk';
 import createInterceptor from 'redux-interceptor';
 
+const FETCH_RANDOM = 'example/FETCH_RANDOM';
+const SET_RANDOM = 'example/SET_RANDOM';
+
 const fetchRandom = () => dispatch => {
-  dispatch({ type: 'FETCH_RANDOM' });
+  dispatch({ type: FETCH_RANDOM });
 
   return new Promise((resolve) => resolve(dispatch({
-    type: 'FETCH_RANDOM',
-    random: Math.random()
+    type: SET_RANDOM,
+    payload: Math.random()
   })));
+}
+
+function reducer(state = { fetching: false, random: null }, action) {
+  switch (action.type) {
+    case FETCH_RANDOM:
+      return { ...state, fetching: true, random: null };
+    case SET_RANDOM:
+      return { ...state, fetching: false, random: action.payload };
+    default:
+      return state;
+  }
 }
 
 class App extends Component {
@@ -70,15 +85,18 @@ class App extends Component {
   }
 }
 
-const ConnectedApp = connect(App, ({ random }) => ({ random }), { fetchServerName });
-const render() => renderToString(<ConnectedApp />);
 const interceptor = createInterceptor();
-const store = createStore(
-  reducer,
-  applyMiddleware(interceptor, thunk)
-);
+const store = createStore(reducer, applyMiddleware(interceptor, thunk));
+const ConnectedApp = connect(({ random }) => ({ random }), { fetchRandom })(App);
+const render = () => renderToString((
+  <Provider store={store}>
+    <ConnectedApp />
+  </Provider>
+));
 
-render();
+// <div data-reactroot="" data-reactid="1" data-react-checksum="622727842">Loading...</div>
+console.log(render());
 
-return interceptor.resolve().then(render);
+// <div data-reactroot="" data-reactid="1" data-react-checksum="-1584000246">0.9193182914256697</div>
+interceptor.resolve().then(render).then(::console.log);
 ```
