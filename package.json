@@ -1,6 +1,6 @@
 {
   "name": "redux-interceptor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Redux middleware for intercepting Redux actions for execution at a later time.",
   "main": "lib/index.js",
   "files": [
