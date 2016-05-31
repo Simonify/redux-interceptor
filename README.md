@@ -2,6 +2,9 @@
 
 `redux-interceptor` is a middleware for intercepting Redux actions and deferring their execution to a later time.
 
+[![npm version](https://img.shields.io/npm/v/redux-interceptor.svg)](https://www.npmjs.com/package/redux-interceptor)
+[![npm downloads](https://img.shields.io/npm/dm/redux-interceptor.svg)](https://www.npmjs.com/package/redux-interceptor)
+
 ## Install
 `npm install redux-interceptor --save`
 
