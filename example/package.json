@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "build": "$(npm bin)/cross-env BABEL_ENV=commonjs $(npm bin)/babel src --out-dir lib",
+    "build": "$(npm bin)/cross-env BABEL_ENV=commonjs $(npm bin)/babel --presets stage-0 --out-dir lib src",
     "start": "npm run build && node lib/index.js"
   },
   "author": "Simon Fletcher <simon@wakecodesleep.com> (http://wakecodesleep.com)",
@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "babel-cli": "^6.8.0",
+    "babel-preset-stage-0": "^6.5.0",
     "cross-env": "^1.0.7"
   }
 }
