@@ -32,9 +32,22 @@ export default function createInterceptorMiddleware() {
   }
 
   function handleActions(followChain = true) {
+    const deferHandleActions = () => new Promise((resolve, reject) => (
+      setTimeout(() => (
+        handleActions().then(
+          () => setTimeout(resolve, 0),
+          () => setTimeout(reject, 0)
+        )
+      ), 0)
+    ));
+
     if (!actions.length) {
-      active = false;
-      return Promise.all(promises);
+      if (!promises.length) {
+        active = false;
+        return Promise.resolve();
+      }
+
+      return Promise.all(promises).then(deferHandleActions, deferHandleActions);
     }
 
     actions.map(execAction);
@@ -45,7 +58,7 @@ export default function createInterceptorMiddleware() {
     promises = [];
 
     if (followChain) {
-      promise = promise.then(handleActions, handleActions);
+      promise = promise.then(deferHandleActions, deferHandleActions);
     } else {
       active = false;
     }
